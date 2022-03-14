@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Service\PvService;
+use App\Models\Pv;
 use Illuminate\Support\ServiceProvider;
 use Elasticsearch\ClientBuilder as ESClientBuilder;
 
@@ -25,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return $builder->build();
+        });
+
+        // 注册pv单例
+        $this->app->singleton('pv',function () {
+            return new PvService();
         });
     }
 

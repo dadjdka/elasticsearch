@@ -10,16 +10,33 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Service\EsService;
+use App\Http\Service\PvService;
 use App\Jobs\Queue;
 use App\Models\GoodsProduct;
 use App\Models\Member;
+use App\Models\Pv;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class PingController extends Controller
 {
 
+
+
     public function index(EsService $esService)
     {
+
+        DB::beginTransaction();
+
+        sleep(2);
+//        $pv = DB::table('pv')->where('name','index')->sharedLock()->get();
+        $pv = DB::table('pv')->where('name','index')->lockForUpdate()->update(['value' => 28]);
+        DB::commit();
+
+        return $pv;
 //        $arr = ['member_id' => 1];
 //        dd(Queue::dispatch($arr));
 
